@@ -1,29 +1,33 @@
-// Define the API endpoint URL
-const apiUrl = 'https://ea1.aconex.com/html/includes/js/api.js?id=1687445908773';
-
-// Define the function to fetch data from the API
-async function fetchDataFromAPI() {
-  try {
-    // Make a GET request to the API endpoint
-    const response = await fetch(apiUrl);
+console.log("test44");
+//https://ea1.aconex.com/api/projects/1879048400/register?search_query=trackingid:271341877549075211&return_fields=current,trackingid,versionnumber,registered";
+const link = "https://ea1.aconex.com/api/projects/1879048400/register/schema?search_query=trackingid:271341877549075211&return_fields=current,trackingid,versionnumber,registered";
+const hdr = new Headers();
+export{}
+hdr.set("Authorization", "Basic " + "cG9sZWFyeTpBdXRoM250MWM=");
+fetch(link, {
+  headers: hdr
+})
+  .then(function(resp){
+    return resp.text();
+  })
+  .then(function(data){
+    //console.log("Testing here" + data);
+    console.log("JSON Data = " +JSON.stringify(data));
     
-    // Check if the response is successful
-    if (!response.ok) {
-      throw new Error('Request failed');
+  })
+/*  .then(response => {
+    if (response.ok) {
+      //return response.json();
+      console.log("Testing response "+ response.status);      
+    } else {
+      throw new Error("Error: " + response.status);
     }
-    
-    // Parse the response as JSON
-    const data = await response.json();
-    
-    // Process the data
-    console.log('API response:', data);
-    
-    // Return the data or perform additional operations
-    return data;
-  } catch (error) {
-    console.error('Error:', error);
-  }
-}
-
-// Call the function to fetch data from the API
-fetchDataFromAPI();
+  })
+  .then(data => {
+    // Handle the retrieved data
+    console.log("Data coming"+data);
+  })
+  .catch(error => {
+    console.log(error);
+  });
+*/
