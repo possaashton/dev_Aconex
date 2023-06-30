@@ -1,5 +1,5 @@
 // Define the API endpoint URL
-const apiUrl = 'https://api.example.com';
+const apiUrl = 'https://ea1.aconex.com/html/includes/js/api.js?id=1687445908773';
 
 // Define the function to fetch data from the API
 async function fetchDataFromAPI() {
