@@ -1,2 +1,2 @@
-# dev_Aconex
-Dev repositiory for Aconex project
+# dev_Aconex sample plugin
+this is a test object
