@@ -38,25 +38,77 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 console.log("test44");
 var axios = require('axios');
+var fs = require('fs');
 var parseString = require('xml2js').parseString;
 //https://ea1.aconex.com/api/projects/1879048400/register?search_query=trackingid:271341877549075211&return_fields=current,trackingid,versionnumber,registered";
 //https://ea1.aconex.com/api/projects/1879048400/register/schema
-var link = "https://ea1.aconex.com/api/projects/1879048400/register?search_query=trackingid:271341877549075211&return_fields=current,trackingid,versionnumber";
+var link = "https://ea1.aconex.com/api/projects/1879048422/register?search_query=trackingid:271341877549245596&return_fields=current,trackingid,versionnumber,docno,doctype";
 function parseXml(xmlData) {
     parseString(xmlData, function (error, result) {
         if (error) {
-            console.log("Error occured while parsing");
+            console.log("Error occured while parsing the XML file");
         }
-        console.log(JSON.stringify(result));
+        //console.log(JSON.stringify(result));   
+        postDatatoAPI();
+    });
+}
+function postDatatoAPI() {
+    return __awaiter(this, void 0, void 0, function () {
+        var xmlString, post_url, fileData, boundary, headers, data, response, error_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    xmlString = "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>\n  <Document>\n  <DocumentNumber>161195</DocumentNumber>\n  <DocumentType>Report</DocumentType>\n  <Revision>1</Revision>\n  <Title>Test Document</Title>\n  <Current>true</Current>\n  <Discipline>Computer Engg</Discipline>\n  <VersionNumber>1</VersionNumber>\n  <HasFile>false</HasFile>\n  </Document>";
+                    post_url = 'https://ea1.aconex.com/api/projects/1879048422/register';
+                    fileData = fs.readFileSync('C:/Users/Ashton Possa/VisualStudioCode/gh-repos/dev_Aconex/file.pdf', 'base64');
+                    boundary = '-------------------------' + Date.now().toString(16);
+                    headers = {
+                        'Content-Type': 'application/xml',
+                    };
+                    data = '';
+                    data += "--".concat(boundary, "\r\n");
+                    data += "Content-Disposition: form-data; name=\"xmlString\"\r\n\r\n";
+                    data += xmlString;
+                    data += "\r\n--".concat(boundary, "\r\n");
+                    data += "Content-Disposition: form-data; name=\"file\"; filename=\"file.pdf\"\r\n";
+                    data += 'Content-Type: application/pdf\r\n\r\n';
+                    data += fileData;
+                    data += "\r\n--".concat(boundary, "--");
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, axios.post(post_url, xmlString, {
+                            headers: {
+                                Authorization: 'Basic ' + 'cG9sZWFyeTpBdXRoM250MWM=',
+                                headers: headers,
+                            },
+                            responseType: 'text', // Set the response type to plain text
+                        })];
+                case 2:
+                    response = _a.sent();
+                    if (response.status == 200) {
+                        console.log("In success" + response.status);
+                    }
+                    else {
+                        console.log("Error code while posting Data111 : " + response.status);
+                    }
+                    return [3 /*break*/, 4];
+                case 3:
+                    error_1 = _a.sent();
+                    console.error("Error code while posting Data222 : " + error_1);
+                    return [3 /*break*/, 4];
+                case 4: return [2 /*return*/];
+            }
+        });
     });
 }
 function getQuotes() {
     return __awaiter(this, void 0, void 0, function () {
-        var url, response, xmlData, result, error_1;
+        var url, response, xmlData, result, error_2;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    _a.trys.push([0, 3, , 4]);
+                    _a.trys.push([0, 5, , 6]);
                     url = link;
                     return [4 /*yield*/, axios.get(url, {
                             headers: {
@@ -67,17 +119,22 @@ function getQuotes() {
                         })];
                 case 1:
                     response = _a.sent();
+                    if (!(response.status == 200)) return [3 /*break*/, 3];
                     xmlData = response.data;
+                    console.log(xmlData);
                     return [4 /*yield*/, parseXml(xmlData)];
                 case 2:
                     result = _a.sent();
-                    console.log(xmlData.length);
                     return [3 /*break*/, 4];
                 case 3:
-                    error_1 = _a.sent();
-                    console.error(error_1);
-                    return [3 /*break*/, 4];
-                case 4: return [2 /*return*/];
+                    console.log("Error code while Fetching Data : " + response.status);
+                    _a.label = 4;
+                case 4: return [3 /*break*/, 6];
+                case 5:
+                    error_2 = _a.sent();
+                    console.error(error_2);
+                    return [3 /*break*/, 6];
+                case 6: return [2 /*return*/];
             }
         });
     });
